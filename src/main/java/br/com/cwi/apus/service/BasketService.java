@@ -3,14 +3,16 @@ package br.com.cwi.apus.service;
 import br.com.cwi.apus.domain.Basket;
 import br.com.cwi.apus.domain.Customer;
 import br.com.cwi.apus.domain.Product;
+import br.com.cwi.apus.domain.PurchaseOrder;
 import br.com.cwi.apus.repository.BasketRepository;
 import br.com.cwi.apus.repository.ProductRepository;
+import br.com.cwi.apus.repository.PurchaseOrderRepository;
 import br.com.cwi.apus.request.CustomerAddressRequest;
 import br.com.cwi.apus.request.CustomerIdentityRequest;
 import br.com.cwi.apus.request.CustomerPaymentRequest;
 import br.com.cwi.apus.request.ProductRequest;
 import br.com.cwi.apus.response.BasketResponse;
-import br.com.cwi.apus.response.OrderCheckoutResponse;
+import br.com.cwi.apus.response.PurchaseOrderCheckoutResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class BasketService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private PurchaseOrderRepository purchaseOrderRepository;
 
     public BasketResponse create() {
         Basket basket = basketRepository.save(new Basket());
@@ -41,7 +46,6 @@ public class BasketService {
                     product.get().setQuantity(productRequest.getQuantity());
                 } else {
                     basket.get().getProducts().add(product.get());
-                    // product.get().setBasket(basket.get());
                 }
                 basketRepository.save(basket.get());
 
@@ -111,11 +115,12 @@ public class BasketService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<OrderCheckoutResponse> checkout(Long id) {
+    public ResponseEntity<PurchaseOrderCheckoutResponse> checkout(Long id) {
         Optional<Basket> basket = basketRepository.findById(id);
 
         if (basket.isPresent()) {
-
+            PurchaseOrder purchaseOrder = purchaseOrderRepository.save(new PurchaseOrder(basket.get()));
+            return ResponseEntity.ok(new PurchaseOrderCheckoutResponse(purchaseOrder.getId()));
         }
 
         return ResponseEntity.notFound().build();

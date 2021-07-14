@@ -6,7 +6,7 @@ import br.com.cwi.apus.request.CustomerIdentityRequest;
 import br.com.cwi.apus.request.CustomerPaymentRequest;
 import br.com.cwi.apus.request.ProductRequest;
 import br.com.cwi.apus.response.BasketResponse;
-import br.com.cwi.apus.response.OrderCheckoutResponse;
+import br.com.cwi.apus.response.PurchaseOrderCheckoutResponse;
 import br.com.cwi.apus.service.BasketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class BasketController {
     }
 
     @PutMapping("/{id}/checkout")
-    public ResponseEntity<OrderCheckoutResponse> checkout(@PathVariable Long id) {
+    public ResponseEntity<PurchaseOrderCheckoutResponse> checkout(@PathVariable Long id) {
         return basketService.checkout(id);
     }
 
