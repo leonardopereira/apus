@@ -2,11 +2,13 @@ package br.com.cwi.apus.domain;
 
 import br.com.cwi.apus.enums.Status;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class PurchaseOrder {
 
     @Id

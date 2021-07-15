@@ -15,6 +15,7 @@ import br.com.cwi.apus.response.BasketResponse;
 import br.com.cwi.apus.response.PurchaseOrderCheckoutResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -30,6 +31,9 @@ public class BasketService {
 
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     public BasketResponse create() {
         Basket basket = basketRepository.save(new Basket());
@@ -120,6 +124,15 @@ public class BasketService {
 
         if (basket.isPresent()) {
             PurchaseOrder purchaseOrder = purchaseOrderRepository.save(new PurchaseOrder(basket.get()));
+
+            // todo Revisar notificação via email
+            /*SimpleMailMessage message = new SimpleMailMessage();
+            message.setSubject("Pedido " + purchaseOrder.getId());
+            message.setText("Seu pedido" + purchaseOrder.getId() + " foi criado com sucesso!");
+            message.setTo("wolmirgarbin@gmail.com");
+
+            mailSender.send(message);*/
+
             return ResponseEntity.ok(new PurchaseOrderCheckoutResponse(purchaseOrder.getId()));
         }
 
