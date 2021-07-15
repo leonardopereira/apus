@@ -32,7 +32,7 @@ public class BasketService {
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
 
-    @Autowired
+    //@Autowired
     private JavaMailSender mailSender;
 
     public BasketResponse create() {
