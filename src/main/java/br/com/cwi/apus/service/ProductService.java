@@ -5,12 +5,12 @@ import br.com.cwi.apus.repository.ProductRepository;
 import br.com.cwi.apus.response.ProductDetailResponse;
 import br.com.cwi.apus.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -18,13 +18,14 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<ProductResponse> findAll() {
-        List<Product> products = productRepository.findAll();
-
-        return products.stream().map(product -> {
-           ProductResponse productResponse = new ProductResponse(product.getId(), product.getDescription());
-           return productResponse;
-        }).collect(Collectors.toList());
+    public Page<ProductResponse> findAll(String description, Pageable pagination) {
+        if (description == null) {
+            Page<Product> products = productRepository.findAll(pagination);
+            return ProductResponse.convert(products);
+        } else {
+            Page<Product> products = productRepository.findByDescriptionContainingIgnoreCase(description, pagination);
+            return ProductResponse.convert(products);
+        }
     }
 
     public ResponseEntity<ProductDetailResponse> detail(Long id) {
