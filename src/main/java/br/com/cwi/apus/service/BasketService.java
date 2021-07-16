@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Service
@@ -35,9 +37,10 @@ public class BasketService {
     //@Autowired
     private JavaMailSender mailSender;
 
-    public BasketResponse create() {
+    public ResponseEntity<BasketResponse> create(UriComponentsBuilder uriComponentsBuilder) {
         Basket basket = basketRepository.save(new Basket());
-        return new BasketResponse(basket.getId());
+        URI uri = uriComponentsBuilder.path("/basket/{id}").buildAndExpand(basket.getId()).toUri();
+        return ResponseEntity.created(uri).body(new BasketResponse(basket.getId()));
     }
 
     public ResponseEntity<Basket> addProduct(Long id, ProductRequest productRequest) {

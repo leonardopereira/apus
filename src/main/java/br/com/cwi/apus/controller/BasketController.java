@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/basket")
@@ -21,8 +22,8 @@ public class BasketController {
     private BasketService basketService;
 
     @PostMapping
-    public BasketResponse create() {
-        return basketService.create();
+    public ResponseEntity<BasketResponse> create(UriComponentsBuilder uriComponentsBuilder) {
+        return basketService.create(uriComponentsBuilder);
     }
 
     @PutMapping("/{id}/item")
