@@ -9,6 +9,7 @@ import br.com.cwi.apus.response.BasketResponse;
 import br.com.cwi.apus.response.PurchaseOrderCheckoutResponse;
 import br.com.cwi.apus.service.BasketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class BasketController {
     private BasketService basketService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BasketResponse> create(UriComponentsBuilder uriComponentsBuilder) {
         return basketService.create(uriComponentsBuilder);
     }

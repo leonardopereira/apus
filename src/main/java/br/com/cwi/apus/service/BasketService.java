@@ -83,20 +83,21 @@ public class BasketService {
     }
 
     public ResponseEntity<Basket> updateAddress(Long id, CustomerAddressRequest customerAddressRequest) {
-        Optional<Basket> basket = basketRepository.findById(id);
+        Optional<Basket> basketOptional = basketRepository.findById(id);
 
-        if (basket.isPresent()) {
-            if (basket.get().getCustomer() != null) {
-                basket.get().getCustomer().setZip(customerAddressRequest.getZip());
-                basket.get().getCustomer().setAddress(customerAddressRequest.getAddress());
+        if (basketOptional.isPresent()) {
+            Basket basket = basketOptional.get();
+            if (basket.getCustomer() != null) {
+                basket.getCustomer().setZip(customerAddressRequest.getZip());
+                basket.getCustomer().setAddress(customerAddressRequest.getAddress());
             } else {
                 Customer customer = new Customer();
                 customer.setZip(customerAddressRequest.getZip());
                 customer.setAddress(customerAddressRequest.getAddress());
-                basket.get().setCustomer(customer);
+                basket.setCustomer(customer);
             }
 
-            basketRepository.save(basket.get());
+            basketRepository.save(basket);
 
             return ResponseEntity.ok().build();
         }

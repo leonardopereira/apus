@@ -27,3 +27,10 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+myapp:
+  password: ${MY_PASSWORD}
+  external:
+    cetus:
+      url: ${CETUS_URL:https://apus-external.herokuapp.com}
+    lyra:
+      url: ${LYRA_URL:https://apus-external.herokuapp.com}
